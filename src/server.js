@@ -8,6 +8,8 @@ const {
   getServices,
   statisticsPayment,
   statisticsReplenishment,
+  getPhone,
+  addPhone,
   getStatistics,
   getStatisticsInfo
 } = require('./database.js');
@@ -29,7 +31,7 @@ wss.on('connection', (ws) => {
       resp = await login(data.login, data.password, users, ws);
     }
     if(data.func === 'registration') {
-      resp = await registration(data.login, data.password);
+      resp = await registration(data.login, data.password, users, ws);
     }
     if(data.func === 'getCards') {
       resp = await getCards(data.login);
@@ -48,6 +50,15 @@ wss.on('connection', (ws) => {
     }
     if(data.func === 'statisticsReplenishment') {
       resp = await statisticsReplenishment(data.login, data.service, data.phone, data.sum, data.card);
+    }
+    if(data.func === 'getPhone') {
+      resp = await getPhone(data.login, data.phone);
+    }
+    if(data.func === 'addPhone') {
+      resp = await addPhone(data.login, data.phone);
+    }
+    if(data.func === 'getPhone') {
+      resp = await getPhone(data.login, data.phone);
     }
     if(data.func === 'getStatistics') {
       resp = await getStatistics(data.login);

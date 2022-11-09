@@ -20,7 +20,7 @@ async function login(login, password, users, ws) {
     return response;
 }
   
-async function registration(login, password) {
+async function registration(login, password, users, ws) {
     let response = '';
     if(await getData(`Users/${login}`)) {
       response = 'user_exists';
@@ -29,6 +29,8 @@ async function registration(login, password) {
       let updates = {};
       updates[`Users/${login}/password`] = password;
       await setData(updates);
+      users[login] = ws;
+      console.log(`User ${login} is connected.\n`);
       response = 'true';
     }
     return response;
@@ -99,6 +101,17 @@ async function statisticsReplenishment(login, service, phone, sum, card) {
     return 'true';
 }
 
+async function getPhone(login) {
+    return await getData(`Users/${login}/phone`) || '';
+}
+
+async function addPhone(login, phone) {
+    let updates = {};
+    updates[`Users/${login}/phone`] = phone;
+    await setData(updates);
+    return 'true';
+}
+
 async function getStatistics(login) {
     let response = '';
     let statistics = await getData(`Users/${login}/Statistics`) || [];
@@ -140,6 +153,8 @@ module.exports = {
     getServices,
     statisticsPayment,
     statisticsReplenishment,
+    getPhone,
+    addPhone,
     getStatistics,
     getStatisticsInfo
 };
